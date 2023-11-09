@@ -1,0 +1,8 @@
+## Debian
+FROM debian
+
+COPY entrypoint.sh /entrypoint.sh
+
+ENV NOM=Mathieu
+
+ENTRYPOINT ["/entrypoint.sh"]
