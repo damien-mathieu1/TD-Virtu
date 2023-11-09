@@ -13,7 +13,7 @@
         
           // On met la chaine de caractères "hello" dans la variable 'texte'
           // Les noms de variable commencent par $ en PHP
-          $texte = "hello world  2 !";
+          $texte = "hello world !";
 
           // On écrit le contenu de la variable 'texte' dans la page Web
           echo $texte;

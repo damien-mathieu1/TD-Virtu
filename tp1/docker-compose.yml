@@ -7,85 +7,20 @@ services:
       - MARIADB_ROOT_PASSWORD=changeme
     networks:
       - db
-    volumes:
-      - ./mysql:/var/lib/mysql
-    ports:
-      - "3306:3306"
-    logging:
-      driver: loki
-      options:
-        loki-url: http://127.0.0.1:3100/loki/api/v1/push
-        loki-pipeline-stages: |
-          - regex:
-              expression: '(level|lvl|severity)=(?P<level>\w+)'
-          - labels:
-              level:
-  prod:
+
+  app:
     build:
       context: .
       dockerfile_inline: |
         FROM php:7.2-apache
-        ENV MYSQL_DATABASE=db
-        ENV MYSQL_HOST=database
-        ENV MYSQL_PORT=3306
-        ENV MYSQL_USER=root
-        ENV MYSQL_PASSWORD=changeme
-        RUN apt-get update
-        RUN apt-get install -y libpq-dev 
-        COPY ./app/src/* /var/www/html/
         RUN docker-php-ext-install pdo pdo_mysql
         RUN docker-php-ext-enable pdo pdo_mysql
-        RUN php /var/www/html/init.php
-    ports:
-      - "81:81"
-    networks:
-      - db
-      - external
-    logging:
-      driver: loki
-      options:
-        loki-url: http://127.0.0.1:3100/loki/api/v1/push
-        loki-pipeline-stages: |
-          - regex:
-              expression: '(level|lvl|severity)=(?P<level>\w+)'
-          - labels:
-              level:
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.prod-web.rule=Host(`prod`)"
-      - "traefik.http.routers.prod-web.entrypoints=web"
-      - "traefik.http.services.prod.loadbalancer.server.port=80"
-  dev:
-    build:
-      context: .
-      dockerfile_inline: |
-        FROM php:8.2-apache
-        RUN apt-get update
-        RUN apt-get install -y libpq-dev 
-        RUN docker-php-ext-install pdo pgsql pdo_pgsql
-        RUN docker-php-ext-enable pdo pgsql pdo_pgsql
     volumes:
       - ./app/src:/var/www/html/
     ports:
-      - "82:82"
+      - "8000:80"
     networks:
       - db
-      - external
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.dev-web.rule=Host(`latest`)"
-      - "traefik.http.routers.dev-web.entrypoints=web"
-      - "traefik.http.services.dev.loadbalancer.server.port=80"
-    logging:
-      driver: loki
-      options:
-        loki-url: http://127.0.0.1:3100/loki/api/v1/push
-        loki-pipeline-stages: |
-          - regex:
-              expression: '(level|lvl|severity)=(?P<level>\w+)'
-          - labels:
-              level:
+
 networks:
   db:
-  external:
-    external: true

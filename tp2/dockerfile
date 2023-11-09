@@ -1,8 +1,6 @@
 ## Debian
 FROM debian
 
-COPY entrypoint.sh /entrypoint.sh
-
-ENV NOM=Mathieu
-
-ENTRYPOINT ["/entrypoint.sh"]
+## Installation de gettext
+RUN apt-get update
+RUN apt-get install -y gettext

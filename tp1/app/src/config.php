@@ -2,11 +2,11 @@
 
 try
 {
-    $db=$_ENV["MYSQL_DATABASE"];
-    $dbhost=$_ENV["MYSQL_HOST"];
-    $dbport=$_ENV["MYSQL_PORT"];
-    $dbuser=$_ENV["MYSQL_USER"];
-    $dbpasswd=$_ENV["MYSQL_PASSWORD"];
+    $db="mysql";
+    $dbhost="database";
+    $dbport=3306;
+    $dbuser="root";
+    $dbpasswd="changeme";
      
     $pdo = new PDO('mysql:host='.$dbhost.';port='.$dbport.';dbname='.$db.'', $dbuser, $dbpasswd);
     $pdo->exec("SET CHARACTER SET utf8");

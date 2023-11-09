@@ -1,4 +1,3 @@
 #!/bin/bash
+echo "Je suis un entrypoint"
 $@
-echo "Bonjour $NOM"
-

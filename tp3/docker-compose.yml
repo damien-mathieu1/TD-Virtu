@@ -1,12 +1,10 @@
 version: "3"
+
 networks:
   loki:
-  db:
-  external:
-    external: true
 
 services:
-  # loki est un gestionnaire centralisé de logs
+#loki est un gestionnaire centralisé de logs
   loki:
     image: grafana/loki:2.9.0
     ports:
@@ -15,7 +13,7 @@ services:
     networks:
       - loki
 
-  # promtail permet de faire remonter les logs de la machine locale dans loki
+  #promtail permet de faire remonter les logs de la machine locale dans le loki
   promtail:
     image: grafana/promtail:2.9.0
     volumes:
@@ -24,7 +22,7 @@ services:
     networks:
       - loki
 
-  # grafana est l’interface graphique qui permet d’interroger l’API de loki
+#grafana est l'interface graphique qui permet d'interroger l'API de loki
   grafana:
     environment:
       - GF_PATHS_PROVISIONING=/etc/grafana/provisioning
@@ -54,9 +52,4 @@ services:
       - "3000:3000"
     networks:
       - loki
-      - external
-    labels:
-      - "traefik.enable=true"
-      - "traefik.http.routers.grafana-web.rule=Host(`grafana`)"
-      - "traefik.http.routers.grafana-web.entrypoints=web"
-      - "traefik.http.services.grafana.loadbalancer.server.port=80"
+
